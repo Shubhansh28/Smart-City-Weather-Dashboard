@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Smart City Weather</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <label for="input_place">Enter your city name</label>
-    <input type="text" id="input_place">
-    <button id="btn">search</button>
-    <div id="root"></div>
+    <div class="glass-container">
+        <header>
+            <label class="lbl" for="input_place">Smart City Weather</label>
+            <div class="search-box">
+                <input type="text" id="input_place" placeholder="Enter your city name...">
+                <button id="btn">Search</button>
+            </div>
+        </header>
+        <div id="root" class="weather-results"></div>
+    </div>
     <script src="./script.js"></script>
 </body>
 </html>
