@@ -122,26 +122,50 @@ place.addEventListener("keydown",(event)=>{
     }
 });
 
+function fetchLocationByIP() {
+    console.warn("Attempting IP-based geolocation...");
+    fetch('https://ipwho.is/')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                console.log(`IP-based location found: ${data.city}`);
+                fetchWeatherByCoords(data.latitude, data.longitude);
+            } else {
+                throw new Error("IP geolocation failed");
+            }
+        })
+        .catch(err => {
+            console.error("IP Geolocation error. Falling back to default city.", err);
+            fetchWeather("London");
+        });
+}
+
 window.addEventListener('load', () => {
     // Show loading immediately so the user knows we're working
     showLoading();
+
+    const geoOptions = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             position => {
                 let lat = position.coords.latitude;
                 let lon = position.coords.longitude;
+                console.log("Browser geolocation successful.");
                 fetchWeatherByCoords(lat, lon);
             },
             error => {
-                console.warn("Geolocation denied or failed. Loading fallback city.");
-                // Fallback to a default city if geolocation fails
-                fetchWeather("London");
+                console.warn("Browser geolocation denied or failed. Trying IP-based fallback.");
+                fetchLocationByIP();
             },
-            { timeout: 5000 } // Give it 5 seconds before failing
+            geoOptions
         );
     } else {
-        console.warn("Geolocation not supported. Loading fallback city.");
-        fetchWeather("London");
+        console.warn("Geolocation not supported. Trying IP-based fallback.");
+        fetchLocationByIP();
     }
 });
