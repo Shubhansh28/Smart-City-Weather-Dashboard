@@ -123,6 +123,9 @@ place.addEventListener("keydown",(event)=>{
 });
 
 window.addEventListener('load', () => {
+    // Show loading immediately so the user knows we're working
+    showLoading();
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             position => {
@@ -131,8 +134,14 @@ window.addEventListener('load', () => {
                 fetchWeatherByCoords(lat, lon);
             },
             error => {
-                console.log("Geolocation error or denied.");
-            }
+                console.warn("Geolocation denied or failed. Loading fallback city.");
+                // Fallback to a default city if geolocation fails
+                fetchWeather("London");
+            },
+            { timeout: 5000 } // Give it 5 seconds before failing
         );
+    } else {
+        console.warn("Geolocation not supported. Loading fallback city.");
+        fetchWeather("London");
     }
 });
