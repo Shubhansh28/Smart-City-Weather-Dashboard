@@ -4,7 +4,12 @@ let place = document.getElementById('input_place')
 let dataDisplay = document.getElementById('root')
 
 function showLoading() {
-    dataDisplay.innerHTML = `<div class="message">Fetching weather details...</div>`;
+    dataDisplay.innerHTML = `
+        <div class="loading-wrapper">
+            <div class="spinner"></div>
+            <div class="message">Fetching weather details...</div>
+        </div>
+    `;
 }
 
 function showError(msg) {
@@ -59,13 +64,14 @@ function updateWeatherUI(res) {
                 <strong>${humidity}%</strong>
             </div>
             <div class="metric-card">
-                <span>Wind Speed</span>
+                <span>Wind</span>
                 <strong>${windSpeed} m/s</strong>
             </div>
         </div>
 
         <div class="advice-card">
-            <strong>What to Wear:</strong><br> ${advice}
+            <strong>Recommended Gear</strong>
+            ${advice}
         </div>
     `;
 }
